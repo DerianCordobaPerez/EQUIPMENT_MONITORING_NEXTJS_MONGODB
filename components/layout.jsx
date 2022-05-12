@@ -1,14 +1,18 @@
 import Head from 'next/head'
+import Navbar from 'components/navbar'
 
 export default function Layout({ children, title }) {
   title ??= 'Monitoring App'
 
   return (
-    <main className="container my-4">
+    <main>
       <Head>
         <title>{title}</title>
       </Head>
-      {children}
+
+      <Navbar />
+
+      <div className="container my-4">{children}</div>
     </main>
   )
 }
