@@ -1,18 +1,25 @@
-export default function Select({ key, field, change, values }) {
-  const { uid, label, options } = field
-  const value = values[uid]
-  const onChange = ({ target }) => change(uid, target.value)
+import ReactSelect from 'react-select'
+
+export default function Select({ field, change, value }) {
+  const { uid, label, options, multiple } = field
+
+  const onChange = (option) => {
+    const value = multiple ? option.map(({ value }) => value) : option.value
+    change(uid, value)
+  }
 
   return (
-    <div key={key}>
+    <>
       <label htmlFor={uid}>{label}</label>
-      <select id={uid} name={uid} value={value} onChange={onChange}>
-        {options.map((option) => (
-          <option key={option.value} value={option.value}>
-            {option.label}
-          </option>
-        ))}
-      </select>
-    </div>
+      <ReactSelect
+        className="mb-2"
+        key={uid}
+        name={uid}
+        id={uid}
+        onChange={onChange}
+        options={options}
+        isMulti={multiple}
+      />
+    </>
   )
 }
