@@ -1,9 +1,14 @@
+@import '_variables.scss';
+@import 'components/form.module.scss';
+@import 'components/computer.scss';
+
 html,
 body {
   padding: 0;
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,
     Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
+  background-color: $gray-900;
 }
 
 a {

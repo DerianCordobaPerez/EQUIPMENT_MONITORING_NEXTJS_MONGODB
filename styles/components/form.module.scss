@@ -1,0 +1,24 @@
+.title__form {
+  color: #13a85d;
+  margin-top: 20px;
+}
+
+.form {
+  width: 400px;
+  position: relative;
+}
+
+.input {
+  margin-bottom: 10px;
+}
+
+.form__close {
+  font-size: 30px;
+  position: absolute;
+  top: 0;
+  right: 5px;
+  color: #13a85d;
+  &:hover {
+    color: #28a745;
+  }
+}
