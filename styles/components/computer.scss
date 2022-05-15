@@ -62,12 +62,20 @@
   }
 }
 
-.separator {
+.separator__online {
   width: 90%;
   height: 4px;
-  background: linear-gradient(to left, #25ca7f, #0001);
   border-radius: 32px;
   margin: 10px auto;
+  background: linear-gradient(to left, #25ca7f, #0001);
+}
+
+.separator__offline {
+  width: 90%;
+  height: 4px;
+  border-radius: 32px;
+  margin: 10px auto;
+  background: linear-gradient(to left, #ff0000, #0001);
 }
 
 .overlay {

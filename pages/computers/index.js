@@ -1,8 +1,9 @@
 import Link from 'next/link'
 import { API_COMPUTERS } from 'configs/env'
 import Layout from 'components/layout'
+import { isConnected } from 'models/computer'
 
-export default function Index({ computers }) {
+export default function Index({ computers, connected }) {
   return (
     <Layout>
       <div className="computers__container">
@@ -12,9 +13,9 @@ export default function Index({ computers }) {
 
         {computers.length > 0 ? (
           <div className="row row-cols-1 row-cols-md-4 g-4 mt-2 justify-content-evenly">
-            {computers.map(({ name, role, ip }) => (
-              <div className="col me-4">
-                <div className="card__computers">
+            {computers.map(({ name, role, ip }, index) => (
+              <div key={role} className="col me-4">
+                <div className="card__computers px-4 pt-2">
                   <div className="overlay"></div>
                   <div className="card-body pt-2">
                     <h6 className="card-title fw-bold">{name}</h6>
@@ -25,7 +26,8 @@ export default function Index({ computers }) {
                     </div>
                   </div>
 
-                  <div className="separator"></div>
+                  <div className={`separator__${connected[index]}`}></div>
+
                   <div className="card__footer">
                     <Link
                       href={'computers/[id]/show'}
@@ -70,9 +72,16 @@ export async function getServerSideProps() {
   const res = await fetch(`${API_COMPUTERS}`)
   const { data: computers } = await res.json()
 
+  const connected = computers.map((computer) =>
+    isConnected({ ip: computer.ip }) ? 'online' : 'offline',
+  )
+
+  console.log(connected)
+
   return {
     props: {
       computers,
+      connected,
     },
   }
 }

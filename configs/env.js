@@ -9,5 +9,5 @@ export const MONGODB_URI =
     ? `mongodb+srv://${DB_USER}:${DB_PASSWORD}@${DB_HOST}/${DB_NAME}?retryWrites=true&w=majority`
     : `mongodb://${DB_HOST}:${DB_PORT}/${DB_NAME}`
 
-export const URL = process.env.NEXT_PUBLIC_ENV_URL || 'http://localhost:3000'
+export const URL = process.env.NEXT_PUBLIC_ENV_URL || 'localhost'
 export const API_COMPUTERS = `http://${URL}:3000/api/computers`
