@@ -1,6 +1,6 @@
 import ReactSelect from 'react-select'
 
-export default function Select({ field, change, value }) {
+export default function Select({ field, change }) {
   const { uid, label, options, multiple } = field
 
   const onChange = (option) => {

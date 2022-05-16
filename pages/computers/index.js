@@ -1,67 +1,58 @@
-import Link from 'next/link'
 import { API_COMPUTERS } from 'configs/env'
 import Layout from 'components/layout'
+import { isConnected } from 'models/computer'
+import Sidebar from 'components/sidebar'
+import { getNetworkTopology } from 'utils/network'
+import { ToggleContext } from 'hooks/useToggle'
+import { useVanillaTilt } from 'hooks/useVanillaTilt'
+import { useFilterComputer } from 'hooks/useFilterComputers'
+import ComputersFeed from 'components/computer/computerFeed'
+import { useContext } from 'react'
 
-export default function Index({ computers }) {
+export default function Index({ computers, topology }) {
+  const { handleToggle, isToggleable } = useContext(ToggleContext)
+  const { filteredComputers, handleFilterComputers } = useFilterComputer({
+    computers,
+  })
+  useVanillaTilt({ element: '.contentBox' })
+
   return (
     <Layout>
-      <div className="computers__container">
-        <h2 className="text-center title__computers">
-          Select the computer to monitor
-        </h2>
+      <button className="toggle__aside" onClick={() => handleToggle('aside')}>
+        <i className="bi bi-list"></i>
+      </button>
 
-        {computers.length > 0 ? (
-          <div className="row row-cols-1 row-cols-md-4 g-4 mt-2 justify-content-evenly">
-            {computers.map(({ name, role, ip }) => (
-              <div className="col me-4">
-                <div className="card__computers">
-                  <div className="overlay"></div>
-                  <div className="card-body pt-2">
-                    <h6 className="card-title fw-bold">{name}</h6>
-                    <div className="body__details">
-                      <p className="card-text">{role}</p>
-                      <p className="card-text">{ip}</p>
-                      <i className="bi bi-laptop-fill"></i>
-                    </div>
-                  </div>
+      <h2 className="text-center title__computers">
+        Select the computer to monitor
+      </h2>
 
-                  <div className="separator"></div>
-                  <div className="card__footer">
-                    <Link
-                      href={'computers/[id]/show'}
-                      as={`computers/${ip}/show`}
-                    >
-                      <a className="me-1">
-                        <i className="bi bi-eye-fill"></i>
-                      </a>
-                    </Link>
+      <Sidebar toggle={isToggleable('aside')}>
+        <div className="d-flex flex-column align-items-center mb-4">
+          <label className="text-white fs-5">Filter computers</label>
 
-                    <Link
-                      href={'computers/[id]/edit'}
-                      as={`computers/${ip}/edit`}
-                    >
-                      <a className="ms-1">
-                        <i className="bi bi-pencil-square"></i>
-                      </a>
-                    </Link>
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
-        ) : (
-          <div className="my-4 text-success text-center">
-            <h4>There are no computers within the monitoring system</h4>
-            <Link href="/computers/create">
-              <a className="btn btn-success mt-5 animation">
-                <i className="bi bi-plus-lg"></i>
-                Create computer
-              </a>
-            </Link>
-            <i className="bi bi-hand-index-thumb-fill d-block hand"></i>
-          </div>
-        )}
-      </div>
+          <select
+            className="aside__item select__input"
+            onChange={handleFilterComputers}
+            name="select__input"
+          >
+            <option value="all">All</option>
+            <option value="online">Online</option>
+            <option value="offline">Offline</option>
+          </select>
+        </div>
+
+        <div className="d-flex flex-column align-items-center">
+          <span className="text-white fs-5">Show topology networks</span>
+          <button
+            className="aside__item"
+            onClick={() => handleToggle('network')}
+          >
+            {isToggleable('network') ? 'Hide' : 'Show'} topology
+          </button>
+        </div>
+      </Sidebar>
+
+      <ComputersFeed computers={filteredComputers} topology={topology} />
     </Layout>
   )
 }
@@ -70,9 +61,19 @@ export async function getServerSideProps() {
   const res = await fetch(`${API_COMPUTERS}`)
   const { data: computers } = await res.json()
 
+  const connected = computers.map((computer) =>
+    isConnected({ ip: computer.ip }) ? 'online' : 'offline',
+  )
+
   return {
     props: {
-      computers,
+      computers: computers.map((computer, index) => ({
+        ...computer,
+        connected: connected[index],
+      })),
+      topology: getNetworkTopology({
+        ips: computers.map((computer) => computer.ip),
+      }),
     },
   }
 }
