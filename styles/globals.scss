@@ -94,7 +94,6 @@ h6 {
     align-self: flex-start;
     transform: rotate(180deg);
     font-size: 30px;
-    color: #25ca7f;
   }
 }
 
@@ -153,5 +152,92 @@ h6 {
     letter-spacing: 2px;
     transform: rotate(-90deg);
     color: rgba(0, 0, 0, 0.2);
+  }
+}
+
+.hr__computers {
+  width: 100%;
+  height: 2px;
+  background-color: #fff;
+  margin-top: 30px;
+  margin-bottom: 30px;
+}
+
+.select__input {
+  option {
+    background-color: rgba(0, 0, 0, 0.8);
+    color: #fff;
+  }
+}
+
+.aside__item {
+  width: 80%;
+  margin-top: 10px;
+  background-color: #0008;
+  color: #fff;
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  border-radius: 5px;
+  padding: 4px 8px;
+  &:hover {
+    cursor: pointer;
+    background-color: #0003;
+  }
+  &:focus {
+    outline: none;
+  }
+}
+
+.aside__computers {
+  position: absolute;
+  top: 85px;
+  z-index: 999;
+  width: 350px;
+  height: calc(100vh - 110px);
+  box-shadow: 0px 0px 5px 0px #0008;
+  transition: all 0.5s ease;
+  padding: 25px 0;
+  background: linear-gradient(to right, #202020, #0008);
+  z-index: 1000;
+}
+
+.show__aside__computers {
+  left: 20px;
+}
+
+.hide__aside__computers {
+  left: -370px;
+}
+
+.aside__background__cover {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 999;
+  transition: all 0.5s ease;
+}
+
+.toggle__aside {
+  position: absolute;
+  padding: 5px 15px;
+  border: none;
+  right: 25px;
+  top: 85px;
+  background-color: #0008;
+  box-shadow: 0px 0px 5px 0px #0008;
+  color: #fff;
+  border-radius: 5px;
+  width: 50px;
+  transition: all 0.5s ease;
+  font-size: 20px;
+  z-index: 1000;
+  &:hover {
+    cursor: pointer;
+    background: rgba(105, 105, 105, 0.726);
+    box-shadow: 0px 0px 5px 0px rgba(105, 105, 105, 0.726);
+
+    color: #fff;
   }
 }

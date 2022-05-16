@@ -53,11 +53,11 @@
   transform: translate(-50%, -50%);
   visibility: hidden;
   transition: all 0.2s ease-out;
-  i {
+  .icon {
     color: #fff;
     font-size: 40px;
     &:hover {
-      color: #25ca7f;
+      color: #aaae;
     }
   }
 }
@@ -67,7 +67,7 @@
   height: 4px;
   border-radius: 32px;
   margin: 10px auto;
-  background: linear-gradient(to left, #25ca7f, #0001);
+  background: linear-gradient(to left, $color-online, #0001);
 }
 
 .separator__offline {
@@ -75,7 +75,7 @@
   height: 4px;
   border-radius: 32px;
   margin: 10px auto;
-  background: linear-gradient(to left, #ff0000, #0001);
+  background: linear-gradient(to left, $color-offline, #0001);
 }
 
 .overlay {
