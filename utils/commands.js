@@ -5,7 +5,6 @@ export function execute({ command }) {
     return execSync(command, {
       cwd: process.cwd(),
       encoding: 'utf-8',
-      timeout: 500,
     })
   } catch (e) {
     return false
