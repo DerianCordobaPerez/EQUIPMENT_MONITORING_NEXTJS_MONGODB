@@ -3,12 +3,7 @@
 source colors.sh
 source utilities.sh
 
-declare -A services=(
-    ["dhcp"]="isc-dhcp-server"
-    ["bind"]="bind9"
-    ["snmp"]="snmpd"
-    ["apache2"]="apache2"
-)
+backup=`cat info.json`
 
 help() {
 cat << EOF
@@ -25,10 +20,12 @@ EOF
 }
 
 backup() {
-    echo -e "${UWHITE}Try to backup the ${services[$1]} service...${NC}"
+    service=`node -pe "JSON.parse(process.argv[1]).backup.$1" "$backup"`
 
-    if ! isServiceInstalled $2; then
-        echo -e "${RED}Service ${services[$1]} is not installed on $ip"
+    echo -e "${UWHITE}Try to backup the $service service...${NC}"
+
+    if ! isServiceInstalled $service; then
+        echo -e "${RED}Service $service is not installed on $ip"
     else
         createDirectory ./backup
         createDirectory ./backup/`date +%d-%m-%Y`
@@ -39,7 +36,7 @@ backup() {
 
         if [ $? -eq 0 ]; then
             mv ./backup/`date +%d-%m-%Y`/backupTemp.tar.gz ./backup/`date +%d-%m-%Y`/$1-`date +%d-%m-%Y-%H%M`.tar.gz
-            echo -e "${GREEN}Backup of the ${services[$1]} service completed."
+            echo -e "${GREEN}Backup of the $service service completed."
         else
             echo -e "${RED}Backup of $1 service failed"
         fi
@@ -71,9 +68,10 @@ for option in $@; do
             backup apache2 apache2
             ;;
         --all|-a)
-            for service in "${!services[@]}"; do
-                backup $service $service
-            done
+            backup dhcp dhcp
+            backup "bind" "bind"
+            backup snmp snmp
+            backup apache2 apache2
             ;;
         *)
             echo -e "Unknown option: ${UWHITE}$option${NC}" >&2

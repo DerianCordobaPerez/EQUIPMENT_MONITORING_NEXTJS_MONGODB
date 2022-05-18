@@ -16,5 +16,11 @@
     "web": "web",
     "snmp": "snmp",
     "client": "client"
+  },
+  "backup": {
+    "dhcp": "isc-dhcp-server",
+    "bind": "bind9",
+    "snmp": "snmpd",
+    "apache2": "apache2"
   }
 }
