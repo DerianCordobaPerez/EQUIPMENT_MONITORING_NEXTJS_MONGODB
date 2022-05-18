@@ -1,5 +1,5 @@
 import connect from 'libs/database'
-import Computer from 'models/computer'
+import Computer, { isConnected } from 'models/computer'
 
 export default async function handler(req, res) {
   const { method } = req
@@ -10,7 +10,21 @@ export default async function handler(req, res) {
     case 'GET':
       try {
         const computers = await Computer.find({})
-        res.status(200).json({ success: true, data: computers })
+        const connected = computers.map(({ ip }) =>
+          isConnected({ ip }) ? 'online' : 'offline',
+        )
+
+        if (!computers.length) {
+          res.status(500).json({ success: false })
+        }
+
+        res.status(200).json({
+          success: true,
+          data: computers.map(({ _doc: computer }, index) => ({
+            ...computer,
+            connected: connected[index],
+          })),
+        })
       } catch (err) {
         res.status(500).json({ success: false })
       }

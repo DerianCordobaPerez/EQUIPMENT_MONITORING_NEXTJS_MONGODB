@@ -5,6 +5,7 @@
 @import '_variables.scss';
 @import 'components/form.module.scss';
 @import 'components/computer.scss';
+@import 'components/spinner.scss';
 
 * {
   font-family: 'Poppins';
@@ -240,4 +241,8 @@ h6 {
 
     color: #fff;
   }
+}
+
+.bg__command {
+  background-color: rgba(0, 0, 255, 0.1);
 }

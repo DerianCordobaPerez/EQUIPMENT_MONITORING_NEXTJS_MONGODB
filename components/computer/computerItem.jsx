@@ -26,8 +26,14 @@ export default function ComputerItem({ computer }) {
           </Link>
 
           <Link href={'computers/[id]/edit'} as={`computers/${ip}/edit`}>
-            <a className="ms-1">
+            <a className="mx-1">
               <i className={`bi bi-pencil-square icon color-${connected}`}></i>
+            </a>
+          </Link>
+
+          <Link href={'computers/[id]/backup'} as={`computers/${ip}/backup`}>
+            <a className="ms-1">
+              <i className={`bi bi-device-hdd icon color-${connected}`}></i>
             </a>
           </Link>
         </div>

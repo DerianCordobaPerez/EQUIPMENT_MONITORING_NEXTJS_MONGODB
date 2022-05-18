@@ -1,5 +1,5 @@
 import connect from 'libs/database'
-import Computer from 'models/computer'
+import Computer, { isConnected, run } from 'models/computer'
 
 export default async function handler(req, res) {
   const {
@@ -18,7 +18,23 @@ export default async function handler(req, res) {
           res.status(404).json({ success: false })
         }
 
-        res.status(200).json({ success: true, data: computer })
+        const connected = isConnected({ ip })
+        const commands =
+          connected &&
+          run({
+            ip,
+            commands: computer.commands,
+            role: computer.role,
+          })
+
+        res.status(200).json({
+          success: true,
+          data: {
+            ...computer._doc,
+            commands,
+            connected,
+          },
+        })
       } catch (err) {
         res.status(400).json({ success: false })
       }
