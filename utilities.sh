@@ -1,7 +1,7 @@
 createDirectory() {
     if [ ! -d "$1" ]; then
         mkdir -p "$1"
-        echo -e "${GREEN}Created $1 directory"
+        echo -e "${GREEN}Created $1 directory${NC}"
     fi
 }
 

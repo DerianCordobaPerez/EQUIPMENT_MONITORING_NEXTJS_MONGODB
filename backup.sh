@@ -25,20 +25,20 @@ backup() {
     echo -e "${UWHITE}Try to backup the $service service...${NC}"
 
     if ! isServiceInstalled $service; then
-        echo -e "${RED}Service $service is not installed on $ip"
+        echo -e "${RED}Service $service is not installed on $ip${NC}"
     else
         createDirectory ./backup
         createDirectory ./backup/`date +%d-%m-%Y`
 
-        ssh -n root@$ip "tar -czf /root/backupTemp.tar.gz /etc/$2/*"
-        scp -r root@$ip:/root/backupTemp.tar.gz ./backup/`date +%d-%m-%Y`/
-        ssh -n root@$ip "rm /root/backupTemp.tar.gz"
+        ssh -n root@$ip "cd /etc && tar -czf /root/backupTemp.tar.gz $2/* >> /dev/null 2>&1"
+        scp -r root@$ip:/root/backupTemp.tar.gz ./backup/`date +%d-%m-%Y`/ >> /dev/null 2>&1
+        ssh -n root@$ip "rm /root/backupTemp.tar.gz >> /dev/null 2>&1"
 
         if [ $? -eq 0 ]; then
             mv ./backup/`date +%d-%m-%Y`/backupTemp.tar.gz ./backup/`date +%d-%m-%Y`/$1-`date +%d-%m-%Y-%H%M`.tar.gz
-            echo -e "${GREEN}Backup of the $service service completed."
+            echo -e "${GREEN}Backup of the $service service completed.${NC}"
         else
-            echo -e "${RED}Backup of $1 service failed"
+            echo -e "${RED}Backup of $1 service failed${NC}"
         fi
     fi
 
