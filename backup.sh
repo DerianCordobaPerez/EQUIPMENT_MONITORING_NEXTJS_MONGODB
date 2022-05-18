@@ -1,5 +1,8 @@
 #!/bin/bash
 
+source colors.sh
+source utilities.sh
+
 declare -A services=(
     ["dhcp"]="isc-dhcp-server"
     ["bind"]="bind9"
@@ -21,27 +24,12 @@ Make use of the commands provided on the offered services you want to back up.
 EOF
 }
 
-createDirectory() {
-    if [ ! -d "$1" ]; then
-        mkdir -p "$1"
-        echo "Created $1 directory"
-    fi
-}
-
-isServiceInstalled() {
-    if ssh root@$ip "service ${services[$1]} status"; then
-        return 0
-    else
-        return 1
-    fi
-}
-
 backup() {
-    echo "Try to backup the ${services[$1]} service..."
+    echo -e "${UWHITE}Try to backup the ${services[$1]} service...${NC}"
 
     if ! isServiceInstalled $2; then
-        echo "Service ${services[$1]} is not installed on $ip"
-    else 
+        echo -e "${RED}Service ${services[$1]} is not installed on $ip"
+    else
         createDirectory ./backup
         createDirectory ./backup/`date +%d-%m-%Y`
 
@@ -51,9 +39,9 @@ backup() {
 
         if [ $? -eq 0 ]; then
             mv ./backup/`date +%d-%m-%Y`/backupTemp.tar.gz ./backup/`date +%d-%m-%Y`/$1-`date +%d-%m-%Y-%H%M`.tar.gz
-            echo "Backup of the ${services[$1]} service completed."
+            echo -e "${GREEN}Backup of the ${services[$1]} service completed."
         else
-            echo "Backup of $1 service failed"
+            echo -e "${RED}Backup of $1 service failed"
         fi
     fi
 
@@ -83,9 +71,12 @@ for option in $@; do
             backup apache2 apache2
             ;;
         --all|-a)
+            for service in "${!services[@]}"; do
+                backup $service $service
+            done
             ;;
         *)
-            echo "Unknown option: $option" >&2
+            echo -e "Unknown option: ${UWHITE}$option${NC}" >&2
             exit 1
             ;;
     esac
