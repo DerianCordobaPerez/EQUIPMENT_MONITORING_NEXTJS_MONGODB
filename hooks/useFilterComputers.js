@@ -3,6 +3,8 @@ import { useState } from 'react'
 export function useFilterComputer({ computers }) {
   const [filteredComputers, setFilteredComputers] = useState(computers)
 
+  const changeFilteredComputers = (values) => setFilteredComputers(values)
+
   const handleFilterComputers = ({ target }) => {
     const { value } = target
 
@@ -16,5 +18,5 @@ export function useFilterComputer({ computers }) {
     setFilteredComputers(filtered)
   }
 
-  return { filteredComputers, handleFilterComputers }
+  return { filteredComputers, handleFilterComputers, changeFilteredComputers }
 }
