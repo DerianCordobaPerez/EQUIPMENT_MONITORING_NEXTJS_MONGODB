@@ -7,7 +7,7 @@ backup=`cat info.json`
 
 help() {
 cat << EOF
-Usage: ${0##*/} <ip> [options]
+Usage: ${0##*/} <ip> <name> [options]
 Make use of the commands provided on the offered services you want to back up.
 
     -h, --help      display this help and exit
@@ -27,28 +27,41 @@ backup() {
     if ! isServiceInstalled $service; then
         echo -e "${RED}Service $service is not installed on $ip${NC}"
     else
-        createDirectory ./backup
-        createDirectory ./backup/`date +%d-%m-%Y`
-
-        ssh -n root@$ip "cd /etc && tar -czf /root/backupTemp.tar.gz $2/* >> /dev/null 2>&1"
-        scp -r root@$ip:/root/backupTemp.tar.gz ./backup/`date +%d-%m-%Y`/ >> /dev/null 2>&1
-        ssh -n root@$ip "rm /root/backupTemp.tar.gz >> /dev/null 2>&1"
+        ssh -n root@$ip "mkdir -p /root/backup/ && cp -r /etc/$2 /root/backup/ >> /dev/null 2>&1"
 
         if [ $? -eq 0 ]; then
-            mv ./backup/`date +%d-%m-%Y`/backupTemp.tar.gz ./backup/`date +%d-%m-%Y`/$1-`date +%d-%m-%Y-%H%M`.tar.gz
-            echo -e "${GREEN}Backup of the $service service completed.${NC}"
+            createDirectory ./backup
+            createDirectory ./backup/`date +%d-%m-%Y`
+            echo -e "${GREEN}Backup of $service service completed successfully!${NC}"
         else
-            echo -e "${RED}Backup of $1 service failed${NC}"
+            echo -e "${RED}Backup of $service service failed!${NC}"
         fi
     fi
 
     echo ""
 }
 
+createBackupTar() {
+    echo -e "${UWHITE}Try to create a tar archive...${NC}"
+
+    ssh -n root@$ip "cd /root/backup >> /dev/null 2>&1 && tar -czf /root/backup.tar.gz * >> /dev/null 2>&1"
+    scp -r root@$ip:/root/backup.tar.gz ./backup/`date +%d-%m-%Y`/ >> /dev/null 2>&1
+    ssh -n root@$ip "rm /root/backup.tar.gz >> /dev/null 2>&1 && if [ -d /root/backup ]; then rm -rf /root/backup; fi >> /dev/null 2>&1"
+
+    if [ $? -eq 0 ]; then
+        mv ./backup/`date +%d-%m-%Y`/backup.tar.gz ./backup/`date +%d-%m-%Y`/$pc-`date +%d-%m-%Y-%H%M`.tar.gz
+        echo -e "${GREEN}Tar created successfully!${NC}"
+    else
+        echo -e "${RED}Tar failed!${NC}"
+    fi
+
+    echo ""
+}
+
 ip=$1
+pc=$2
 
-shift
-
+shift 2
 for option in $@; do
     case $option in
         --help|-h)
@@ -79,3 +92,5 @@ for option in $@; do
             ;;
     esac
 done
+
+createBackupTar
