@@ -68,6 +68,12 @@ for option in "$@"; do
         -w|--web)
             restoreBackup web
             ;;
+        -a|--all)
+            restoreBackup dhcp
+            restoreBackup "bind"
+            restoreBackup snmp
+            restoreBackup web
+            ;;
         *)
             echo -e "${RED}Invalid option!${NC}"
             help
