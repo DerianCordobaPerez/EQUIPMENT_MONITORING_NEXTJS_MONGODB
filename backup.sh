@@ -3,7 +3,7 @@
 source colors.sh
 source utilities.sh
 
-backup=`cat info.json`
+servicesJson=`cat info.json`
 
 help() {
 cat << EOF
@@ -20,9 +20,9 @@ EOF
 }
 
 backup() {
-    service=`node -pe "JSON.parse(process.argv[1]).backup.$1" "$backup"`
+    service=`node -pe "JSON.parse(process.argv[1]).services.$1" "$servicesJson"`
 
-    echo -e "${UWHITE}Try to backup the $service service...${NC}"
+    echo -e "${UWHITE}Try to backup the $service service...${NC}"   
 
     if ! isServiceInstalled $service; then
         echo -e "${RED}Service $service is not installed on $ip${NC}"

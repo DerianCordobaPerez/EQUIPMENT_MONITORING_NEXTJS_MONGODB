@@ -17,7 +17,7 @@
     "snmp": "snmp",
     "client": "client"
   },
-  "backup": {
+  "services": {
     "dhcp": "isc-dhcp-server",
     "bind": "bind9",
     "snmp": "snmpd",
