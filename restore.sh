@@ -21,27 +21,33 @@ EOF
 
 restoreBackup() {
     service=`node -pe "JSON.parse(process.argv[1]).services.$1" "$servicesJson"`
-    echo -e "${UWHITE}Try to restore the $service service...${NC}"
+    echo -e "${UWHITE}Try to restore the $service service...${NC}\n"
+
+    if ! isConnectionNetwork $ip; then
+        echo -e "${RED}Connection to $ip failed.${NC}"
+        exit 1
+    fi
 
     if ! isServiceInstalled $service; then
-        echo -e "${RED}Service $service is not installed on $ip${NC} It will be installed for proper operation."
+        echo -e "\n${RED}Service $service is not installed on $ip${NC}\nIt will be installed for proper operation."
         echo -e "${UWHITE}Try to install $service service...${NC}"
-        apt install -y $service >> /dev/null 2>&1
+        ssh -n root@$ip "apt-get install -y $service" > /dev/null 2>&1
 
         if [ $? -eq 0 ]; then
             echo -e "${GREEN}Service $service installed successfully!${NC}"
         else
             echo -e "${RED}Service $service installation failed!${NC}"
+            exit 1
         fi
     fi
 
-    echo -e "${UWHITE}Try to restore the $service service...${NC}"
     scp -r ./backup/$directory/$backupFile root@$ip:/root >> /dev/null 2>&1
-    ssh -n root@$ip "cd /root && tar -zxvf $backupFile -C /etc $service && rm /root/$backupFile" >> /dev/null 2>&1
+    ssh -n root@$ip "cd /root && tar -zxvf $backupFile -C /etc $1/ && rm /root/$backupFile" > /dev/null 2>&1
 
     if [ $? -eq 0 ]; then
         echo -e "${GREEN}Restore of $service service completed successfully!${NC}"
     else
+        ssh -n root@$ip apt purge --auto-remove $service > /dev/null 2>&1
         echo -e "${RED}Restore of $service service failed!${NC}"
     fi
 }
@@ -49,6 +55,8 @@ restoreBackup() {
 ip=$1
 directory=$2
 backupFile=$3
+
+shift 3
 
 for option in "$@"; do
     case $option in
