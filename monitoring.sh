@@ -19,7 +19,8 @@ declare -A specialCommands=(
    ["dns"]="cat /etc/bind/named.conf.local"
    ["web"]="apache2ctl -S"
    ["snmp"]="snmpget -v1 -c public 192.168.10.1 sysDescr.0"
-   ["logs"]="cat /var/log/remote/`ssh -n root@$ip hostname`/rsyslogd.log > ./logs/log - $ip.log"
+   ["logs"]="cat /var/log/remote/`ssh -n root@$ip hostname`/rsyslogd.log > ./logs/log - $ip.log",
+   ["isConnected"]="ping -c 1 -i 0.2 -w 1 $ip"
 )
 
 if [ -v specialCommands[$command] ]; then
