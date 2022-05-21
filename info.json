@@ -7,8 +7,8 @@
     "users": "lastb",
     "process": "ps -aux | tail --lines=10",
     "table": "netstat -nr",
-    "read": "if [ -f ./logs/logs- $ip.log ]; then; cat ./logs/logs - $ip.log; else; cat /var/log/remote/`ssh -n root@$ip hostname`/rsyslogd.log; fi",
-    "client": "hostname"
+    "client": "hostname",
+    "bandwidth": "cat /proc/net/dev"
   },
   "roles": {
     "dhcp": "dhcp",

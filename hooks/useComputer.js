@@ -11,7 +11,7 @@ export function useComputer({ ip }) {
   const [autoRefresh, setAutoRefresh] = useState(false)
 
   const { data, error } = useSWR(`/api/computers${ip ? `/${ip}` : ''}`, {
-    refreshInterval: autoRefresh ? 5000 : null,
+    refreshInterval: autoRefresh ? 1200 : null,
   })
 
   useEffect(() => {
