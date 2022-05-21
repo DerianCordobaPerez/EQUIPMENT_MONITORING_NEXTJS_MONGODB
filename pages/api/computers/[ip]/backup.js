@@ -17,12 +17,17 @@ export default async function handle(req, res) {
         }
 
         const services = req.body.services
-          .split(' ')
           .map((service) => `--${service}`)
+          .join(' ')
 
-        const result = execute({ command: `./backup.sh ${services}` })
+        const name = req.body.name
+
+        const result = execute({
+          command: `./backup.sh ${ip} ${name} ${services}`,
+        })
 
         if (!result) {
+          console.log({ result })
           res.status(500).json({ success: false })
         }
 
