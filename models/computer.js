@@ -30,8 +30,8 @@ const computerSchema = new Schema({
  */
 export async function isConnected({ ip }) {
   return await execute({
-    command: 'ping',
-    flags: ['-c', '1', '-i', '0.2', '-w', '1', ip],
+    command: './monitoring.sh',
+    flags: [ip, 'isConnected'],
   })
 }
 
