@@ -8,6 +8,11 @@ import { useContext, useEffect } from 'react'
 import { useComputer } from 'hooks/useComputer'
 import Loading from 'components/loading'
 
+/**
+ * It's a function that returns a layout component with a loading component or a sidebar component, a
+ * title, and a computers feed component
+ * @returns The return statement is returning the following:
+ */
 export default function Index() {
   const { data: computers, isLoading } = useComputer({ ip: null })
   const { handleToggle, isToggleable } = useContext(ToggleContext)

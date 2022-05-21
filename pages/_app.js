@@ -6,6 +6,10 @@ import 'bootstrap/dist/css/bootstrap.css'
 import 'bootstrap-icons/font/bootstrap-icons.css'
 import 'styles/globals.scss'
 
+/**
+ * We're using the `useEffect` hook to import the bootstrap javascript file
+ * @returns The return value of the function is the component that is being rendered.
+ */
 function MyApp({ Component, pageProps }) {
   useEffect(() => {
     import('bootstrap/dist/js/bootstrap')

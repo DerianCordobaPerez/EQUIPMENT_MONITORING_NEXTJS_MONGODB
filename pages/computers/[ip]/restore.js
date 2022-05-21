@@ -4,6 +4,9 @@ import Layout from 'components/layout'
 import { useDirectory } from 'hooks/useDirectory'
 import Loading from 'components/loading'
 
+/**
+ * It fetches the backup directory from the server and displays it
+ */
 export default function Restore() {
   const { query } = useRouter()
   const { ip } = query

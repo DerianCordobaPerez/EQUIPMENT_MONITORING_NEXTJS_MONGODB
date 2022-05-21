@@ -1,6 +1,11 @@
 import connect from 'libs/database'
 import Computer, { isConnected, run } from 'models/computer'
 
+/**
+ * It handles GET, PUT, and DELETE requests for a single computer
+ * @param req - The request object.
+ * @param res - The response object.
+ */
 export default async function handler(req, res) {
   const {
     query: { ip },

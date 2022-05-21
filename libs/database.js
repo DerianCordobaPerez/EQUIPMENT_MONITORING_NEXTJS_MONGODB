@@ -16,6 +16,10 @@ if (!cached) {
   }
 }
 
+/**
+ * It returns a promise that resolves to a Mongoose connection
+ * @returns A promise that resolves to a mongoose connection.
+ */
 export default async function connect() {
   if (cached.conn) {
     return cached.conn

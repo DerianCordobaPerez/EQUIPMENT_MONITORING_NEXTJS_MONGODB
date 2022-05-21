@@ -1,6 +1,12 @@
 import { execute } from 'utils/commands'
 import Computer from 'models/computer'
 
+/**
+ * It takes the IP address of the computer to backup, the name of the backup, and the services to
+ * backup, and then executes a shell script that does the actual backup
+ * @param req - The request object.
+ * @param res - The response object.
+ */
 export default async function handle(req, res) {
   const {
     query: { ip },
