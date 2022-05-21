@@ -3,6 +3,10 @@ import { useState, useEffect } from 'react'
 
 /**
  * It returns a `data` object, a `isLoading` boolean, and an `isError` boolean
+ *
+ * @param {string} path The url to fetch
+ *
+ * @returns An object with the data, isLoading, and isError properties
  */
 export function useDirectory({ path }) {
   const [autoRefresh, setAutoRefresh] = useState(false)

@@ -6,6 +6,11 @@ import { useContext } from 'react'
 import { useComputer } from 'hooks/useComputer'
 import Loading from 'components/loading'
 
+/**
+ * It renders a loading component while the data is being fetched, and then it renders the computer's
+ * name, a delete button, and a list of commands
+ * @returns The Show component is being returned.
+ */
 export default function Show() {
   const router = useRouter()
   const { ip } = router.query

@@ -1,6 +1,12 @@
 import connect from 'libs/database'
 import Computer, { isConnected } from 'models/computer'
 
+/**
+ * It gets all the computers from the database, checks if they're online, and returns them to the
+ * client
+ * @param req - The request object.
+ * @param res - The response object.
+ */
 export default async function handler(req, res) {
   const { method } = req
 

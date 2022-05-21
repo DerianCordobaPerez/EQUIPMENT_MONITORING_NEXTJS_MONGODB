@@ -1,6 +1,10 @@
 import Layout from 'components/layout'
 import Image from 'next/image'
 
+/**
+ * It returns a Layout component with a title, two cards, and a footer
+ * @returns a Layout component with a title, a div with two cards and a footer.
+ */
 export default function Home() {
   return (
     <Layout>

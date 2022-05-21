@@ -4,6 +4,11 @@ import { getCommands, getRoles } from 'utils/getInfo'
 import { useState } from 'react'
 import { useRouter } from 'next/router'
 
+/**
+ * It renders a form with two pages, the first page has a name and ip address field, the second page
+ * has a role and commands field
+ * @returns A function that returns a layout component with a form component.
+ */
 export default function Create() {
   const [message, setMessage] = useState('')
   const router = useRouter()

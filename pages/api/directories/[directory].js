@@ -1,5 +1,11 @@
 import { getDirectory, getDirectories, getFiles } from 'utils/files'
 
+/**
+ * It takes a directory name as a query parameter, gets all the files in that directory and all the
+ * subdirectories, and returns them in a JSON response
+ * @param req - The request object
+ * @param res - The response object.
+ */
 export default function handle(req, res) {
   const {
     query: { directory },

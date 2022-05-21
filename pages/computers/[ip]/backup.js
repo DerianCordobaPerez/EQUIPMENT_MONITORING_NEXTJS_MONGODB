@@ -5,6 +5,10 @@ import { useComputer } from 'hooks/useComputer'
 import { useRouter } from 'next/router'
 import { getServices } from 'utils/getInfo'
 
+/**
+ * It renders a form that allows the user to select a backup service and then sends a POST request to
+ * the server to create a backup
+ */
 export default function Backup() {
   const router = useRouter()
   const { ip } = router.query
