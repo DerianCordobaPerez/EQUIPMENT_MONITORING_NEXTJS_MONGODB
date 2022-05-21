@@ -5,6 +5,9 @@ die () {
    exit 1
 }
 
+#["read"]="if [ -f ./logs/logs- $ip.log ]; then cat ./logs/logs - $ip.log; else cat /var/log/remote/`ssh -n root@$ip hostname`/rsyslogd.log; fi"
+
+
 [ "$#" -eq 2 ] || die "2 argument required, $# provided"
 
 commands=`cat info.json`
