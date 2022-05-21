@@ -1,11 +1,8 @@
-import { execSync } from 'child_process'
+import spawn from 'await-spawn'
 
-export function execute({ command }) {
+export async function execute({ command, flags }) {
   try {
-    return execSync(command, {
-      cwd: process.cwd(),
-      encoding: 'utf-8',
-    })
+    return (await spawn(command, flags)).toString()
   } catch (e) {
     return false
   }

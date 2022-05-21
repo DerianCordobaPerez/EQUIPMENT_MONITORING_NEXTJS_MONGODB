@@ -1,6 +1,6 @@
-export const calculateTimeCallback = (callback, args) => {
+export const calculateTimeCallback = async (callback, args) => {
   const start = process.hrtime()
-  const output = callback(args)
+  const output = await callback(args)
   const end = process.hrtime(start)
 
   const seconds = `${end[0] > 0 ? `${end[0]}s` : ''}`

@@ -28,8 +28,11 @@ const computerSchema = new Schema({
  * @returns A function that takes an object with an ip property and returns a promise that resolves to
  * true if the ip is connected to the internet and false if it is not.
  */
-export function isConnected({ ip }) {
-  return execute({ command: `ping -c 1 -i 0.2 -w 1 ${ip}` })
+export async function isConnected({ ip }) {
+  return await execute({
+    command: 'ping',
+    flags: ['-c', '1', '-i', '0.2', '-w', '1', ip],
+  })
 }
 
 /**
@@ -37,18 +40,21 @@ export function isConnected({ ip }) {
  * commands associated with that role on that computer
  * @returns An array of objects with the name of the command and the output of the command.
  */
-export function run({ ip, commands, role }) {
-  return [...commands, role].map((command) => {
-    const { output, time } = calculateTimeCallback(execute, {
-      command: `./monitoring.sh ${ip} ${command}`,
-    })
+export async function run({ ip, commands, role }) {
+  return Promise.all(
+    [...commands, role].map(async (command) => {
+      const { output, time } = await calculateTimeCallback(execute, {
+        command: './monitoring.sh',
+        flags: [ip, command],
+      })
 
-    return {
-      name: command,
-      output,
-      time,
-    }
-  })
+      return {
+        name: command,
+        output,
+        time,
+      }
+    }),
+  )
 }
 
 export default mongoose.models.Computer || model('Computer', computerSchema)
