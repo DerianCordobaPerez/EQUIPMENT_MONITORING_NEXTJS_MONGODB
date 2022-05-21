@@ -15,3 +15,12 @@ export function getCommands() {
 export function getRoles() {
   return getKeyValues('roles')
 }
+
+export function getServices() {
+  const keys = ['dhcp', 'bind', 'web', 'snmp']
+
+  return keys.map((key) => ({
+    label: `${key.charAt(0).toUpperCase()}${key.slice(1)}`,
+    value: key,
+  }))
+}
