@@ -10,8 +10,12 @@ export default async function handler(req, res) {
     case 'GET':
       try {
         const computers = await Computer.find({})
-        const connected = computers.map(({ ip }) =>
-          isConnected({ ip }) ? 'online' : 'offline',
+
+        const connected = await Promise.all(
+          computers.map(async ({ ip }) => {
+            const connected = await isConnected({ ip })
+            return connected ? 'online' : 'offline'
+          }),
         )
 
         if (!computers.length) {
@@ -26,7 +30,7 @@ export default async function handler(req, res) {
           })),
         })
       } catch (err) {
-        res.status(500).json({ success: false })
+        res.status(500).json({ success: false, error: err.message })
       }
       break
     case 'POST':

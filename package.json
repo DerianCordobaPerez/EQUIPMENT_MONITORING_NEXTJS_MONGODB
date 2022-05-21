@@ -9,6 +9,8 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@popperjs/core": "^2.11.5",
+    "await-spawn": "^4.0.2",
     "bootstrap": "^5.2.0-beta1",
     "bootstrap-icons": "^1.8.1",
     "mongoose": "^6.3.3",
