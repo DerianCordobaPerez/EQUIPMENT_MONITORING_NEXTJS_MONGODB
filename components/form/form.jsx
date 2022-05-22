@@ -17,7 +17,14 @@ const fieldMeetsCondition = (values) => (field) => {
 export default function Form({ data, closeRoute, handleSubmit }) {
   const [page, setPage] = useState(0)
   const [currentPageData, setCurrentPageData] = useState(data[page])
-  const [values, setValues] = useState({})
+  const [values, setValues] = useState({
+    ...data.reduce((acc, page) => {
+      page.fields.forEach((field) => {
+        acc[field.uid] = field.value || (field.options ? [] : '')
+      })
+      return acc
+    }, {}),
+  })
 
   closeRoute ??= '/'
 
