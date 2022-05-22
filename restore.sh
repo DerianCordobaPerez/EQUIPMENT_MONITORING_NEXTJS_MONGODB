@@ -7,7 +7,7 @@ servicesJson=`cat info.json`
 
 help() {
 cat << EOF
-Usage: ${0##*/} <ip> <directory> <name> [options]
+Usage: ${0##*/} <ip> <name> [options]
 Use the commands provided in the offered services that you want to restore.
 
     -h, --help      display this help and exit
@@ -21,7 +21,7 @@ EOF
 
 restoreBackup() {
     service=`node -pe "JSON.parse(process.argv[1]).services.$1" "$servicesJson"`
-    echo -e "${UWHITE}Try to restore the $service service...${NC}\n"
+    echo -e "${UWHITE}\n\nTry to restore the $service service...${NC}"
 
     if ! isConnectionNetwork $ip; then
         echo -e "${RED}Connection to $ip failed.${NC}"
@@ -29,7 +29,7 @@ restoreBackup() {
     fi
 
     if ! isServiceInstalled $service; then
-        echo -e "\n${RED}Service $service is not installed on $ip${NC}\nIt will be installed for proper operation."
+        echo -e "${RED}Service $service is not installed on $ip${NC}\nIt will be installed for proper operation."
         echo -e "${UWHITE}Try to install $service service...${NC}"
         ssh -n root@$ip "apt-get install -y $service" > /dev/null 2>&1
 
@@ -41,8 +41,8 @@ restoreBackup() {
         fi
     fi
 
-    scp -r ./backup/$directory/$backupFile root@$ip:/root >> /dev/null 2>&1
-    ssh -n root@$ip "cd /root && tar -zxvf $backupFile -C /etc $1/ && rm /root/$backupFile" > /dev/null 2>&1
+    scp -r ./backup/$backupFile root@$ip:/root/backup.tar.gz > /dev/null 2>&1
+    ssh -n root@$ip "cd /root && tar -zxvf backup.tar.gz -C /etc $1/ && rm /root/backup.tar.gz" > /dev/null 2>&1
 
     if [ $? -eq 0 ]; then
         echo -e "${GREEN}Restore of $service service completed successfully!${NC}"
@@ -53,10 +53,9 @@ restoreBackup() {
 }
 
 ip=$1
-directory=$2
-backupFile=$3
+backupFile=$2
 
-shift 3
+shift 2
 
 for option in "$@"; do
     case $option in

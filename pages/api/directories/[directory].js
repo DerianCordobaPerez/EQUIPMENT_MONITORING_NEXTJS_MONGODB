@@ -34,18 +34,17 @@ export default function handle(req, res) {
 
         res.status(200).json({
           success: true,
-          data: [
-            {
-              name: directory,
-              files: parentDirFiles,
-            },
-            ...subDirectoriesFiles.map((subDirectoryFiles, index) => {
-              return {
-                name: subDirectories[index],
-                files: subDirectoryFiles,
-              }
-            }),
-          ],
+          data: {
+            name: directory,
+            subDirectories: subDirectoriesFiles.map(
+              (subDirectoryFiles, index) => {
+                return {
+                  name: subDirectories[index],
+                  files: subDirectoryFiles,
+                }
+              },
+            ),
+          },
         })
       } catch (e) {
         res.status(400).json({ success: false, error: e.message })
