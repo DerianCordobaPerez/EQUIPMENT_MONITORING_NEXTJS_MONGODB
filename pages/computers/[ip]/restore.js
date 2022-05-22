@@ -4,6 +4,8 @@ import Layout from 'components/layout'
 import { useDirectory } from 'hooks/useDirectory'
 import Loading from 'components/loading'
 import { getServices } from 'utils/getInfo'
+import Alert from 'components/alert'
+import { useComputer } from 'hooks/useComputer'
 
 /**
  * It fetches the backup directory from the server and displays it
@@ -11,6 +13,7 @@ import { getServices } from 'utils/getInfo'
 export default function Restore() {
   const router = useRouter()
   const { ip } = router.query
+  const { data: computer } = useComputer({ ip })
   const { data: directory, isLoading } = useDirectory({
     path: '/api/directories/backup',
   })
@@ -74,11 +77,18 @@ export default function Restore() {
     <Loading />
   ) : (
     <Layout title="Restore backup">
-      <Form
-        data={formData}
-        closeRoute="/computers"
-        handleSubmit={handleSubmit}
-      />
+      {!computer?.connected ? (
+        <Alert type="warning">
+          <span className="fw-bold">Warning!</span> The computer is not turned
+          on.
+        </Alert>
+      ) : (
+        <Form
+          data={formData}
+          closeRoute="/computers"
+          handleSubmit={handleSubmit}
+        />
+      )}
     </Layout>
   )
 }

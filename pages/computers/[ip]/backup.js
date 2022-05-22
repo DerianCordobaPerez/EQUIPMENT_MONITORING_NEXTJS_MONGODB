@@ -3,6 +3,7 @@ import Layout from 'components/layout'
 import Loading from 'components/loading'
 import { useComputer } from 'hooks/useComputer'
 import { useRouter } from 'next/router'
+import Alert from 'components/alert'
 
 /**
  * It renders a form that allows the user to select a backup service and then sends a POST request to
@@ -59,11 +60,18 @@ export default function Backup() {
     <Loading />
   ) : (
     <Layout title={`Backup to computer`}>
-      <Form
-        data={formData}
-        closeRoute="/computers"
-        handleSubmit={handleSubmit}
-      />
+      {!computer.connected ? (
+        <Alert type="warning">
+          <span className="fw-bold">Warning!</span> The computer is not turned
+          on.
+        </Alert>
+      ) : (
+        <Form
+          data={formData}
+          closeRoute="/computers"
+          handleSubmit={handleSubmit}
+        />
+      )}
     </Layout>
   )
 }
