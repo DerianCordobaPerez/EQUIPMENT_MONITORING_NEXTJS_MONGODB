@@ -3,7 +3,6 @@ import Layout from 'components/layout'
 import Loading from 'components/loading'
 import { useComputer } from 'hooks/useComputer'
 import { useRouter } from 'next/router'
-import { getServices } from 'utils/getInfo'
 
 /**
  * It renders a form that allows the user to select a backup service and then sends a POST request to
@@ -13,7 +12,6 @@ export default function Backup() {
   const router = useRouter()
   const { ip } = router.query
   const { data: computer, isLoading } = useComputer({ ip })
-  const services = getServices()
 
   const formData = [
     {
@@ -25,7 +23,13 @@ export default function Backup() {
           component: 'select',
           label: 'Services',
           uid: 'services',
-          options: services,
+          options: [
+            { label: 'Dhcp', value: 'dhcp' },
+            { label: 'Dns', value: 'dns' },
+            { label: 'Web', value: 'web' },
+            { label: 'Snmp', value: 'snmp' },
+            { label: 'All', value: 'all' },
+          ],
           multiple: true,
         },
       ],

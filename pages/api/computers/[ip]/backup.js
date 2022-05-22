@@ -22,20 +22,14 @@ export default async function handle(req, res) {
           res.status(404).json({ success: false })
         }
 
-        const services = req.body.services
-          .map((service) => `--${service}`)
-          .join(' ')
+        const services = req.body.services.map((service) => `--${service}`)
 
         const name = req.body.name
 
-        const result = execute({
-          command: `./backup.sh ${ip} ${name} ${services}`,
+        await execute({
+          command: './backup.sh',
+          flags: [ip, name, ...services],
         })
-
-        if (!result) {
-          console.log({ result })
-          res.status(500).json({ success: false })
-        }
 
         res
           .status(200)
