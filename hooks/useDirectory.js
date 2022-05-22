@@ -12,7 +12,7 @@ export function useDirectory({ path }) {
   const [autoRefresh, setAutoRefresh] = useState(false)
 
   const { data, error } = useSWR(path, {
-    refreshInterval: autoRefresh ? 2500 : null,
+    refreshInterval: autoRefresh ? 5000 : null,
   })
 
   useEffect(() => {

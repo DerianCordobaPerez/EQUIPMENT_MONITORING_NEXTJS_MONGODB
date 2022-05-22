@@ -3,6 +3,7 @@ import Field from './field'
 import FieldGroup from './fieldGroup'
 import Select from './select'
 import Link from 'next/link'
+import Option from './option'
 
 const fieldMeetsCondition = (values) => (field) => {
   if (field.conditional && field.conditional.field) {
@@ -75,7 +76,7 @@ export default function Form({ data, closeRoute, handleSubmit }) {
 
   const onSubmit = (e) => {
     e.preventDefault()
-
+    console.log(values)
     handleSubmit(values)
   }
 
@@ -109,6 +110,15 @@ export default function Form({ data, closeRoute, handleSubmit }) {
                   key={field.uid}
                   field={field}
                   change={fieldChange}
+                  value={values[field.uid]}
+                />
+              )
+            case 'options':
+              return (
+                <Option
+                  key={field.uid}
+                  field={field}
+                  fieldChanged={fieldChange}
                   value={values[field.uid]}
                 />
               )

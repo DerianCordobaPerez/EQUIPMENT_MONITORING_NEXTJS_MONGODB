@@ -36,6 +36,12 @@ export default function ComputerItem({ computer }) {
               <i className={`bi bi-device-hdd icon color-${connected}`}></i>
             </a>
           </Link>
+
+          <Link href={'computers/[id]/restore'} as={`computers/${ip}/restore`}>
+            <a className="ms-1">
+              <i className={`bi bi-folder-symlink icon color-${connected}`}></i>
+            </a>
+          </Link>
         </div>
       </div>
     </div>
