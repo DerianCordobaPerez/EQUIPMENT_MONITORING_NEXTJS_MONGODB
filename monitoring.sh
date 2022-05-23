@@ -15,11 +15,14 @@ declare -A specialCommands=(
    ["dhcp"]="cat /etc/dhcp/dhcpd.conf"
    ["dns"]="cat /etc/bind/named.conf.local"
    ["web"]="apache2ctl -S"
-   ["snmp"]="snmpget -v1 -c public 192.168.10.1 sysDescr.0"
+   ["snmp"]="snmpget -v1 -c public 192.168.10.1 sysDescr.0",
+   ["topology"]="nmap -sP -n $1/24 | grep "Nmap scan report for" | awk '{print $5}'"
 )
 
 if [ "$command" = "isConnected" ]; then
    ping -c 1 -i 0.2 -w 1 $ip
+elif [ "$command" = "topology" ]; then
+   ${specialCommands[$command]}
 elif [ -v specialCommands[$command] ]; then
    ssh -n root@$ip "${specialCommands[$command]}"
 else

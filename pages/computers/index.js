@@ -7,14 +7,18 @@ import ComputersFeed from 'components/computer/computerFeed'
 import { useContext, useEffect } from 'react'
 import { useComputer } from 'hooks/useComputer'
 import Loading from 'components/loading'
+import Modal from 'components/modal'
+import { useTopology } from 'hooks/useTopologyNetwork'
+import Alert from 'components/alert'
 
 /**
  * It's a function that returns a layout component with a loading component or a sidebar component, a
  * title, and a computers feed component
  * @returns The return statement is returning the following:
  */
-export default function Index() {
+export default function Index({ network }) {
   const { data: computers, isLoading } = useComputer({ ip: null })
+  const { data: topology, isLoading: isLoadingTopology } = useTopology()
   const { handleToggle, isToggleable } = useContext(ToggleContext)
   const { filteredComputers, handleFilterComputers, changeFilteredComputers } =
     useFilterComputer({
@@ -55,10 +59,31 @@ export default function Index() {
                 <option value="online">Online</option>
                 <option value="offline">Offline</option>
               </select>
+
+              <hr className="hr__computers w-75" />
+
+              <label className="text-white fs-5">
+                {!isToggleable('networkModal') ? 'Show' : 'Hide'} topology
+              </label>
+
+              <button
+                className="aside__item"
+                onClick={() => handleToggle('networkModal')}
+              >
+                {!isToggleable('networkModal') ? 'Show' : 'Hide'} topology
+              </button>
             </div>
           </Sidebar>
 
           <ComputersFeed computers={filteredComputers} />
+
+          <Modal title="Network topology" id="networkModal">
+            {isLoadingTopology ? (
+              <Alert type="info">Loading topology...</Alert>
+            ) : (
+              <pre>{topology}</pre>
+            )}
+          </Modal>
         </>
       )}
     </Layout>
