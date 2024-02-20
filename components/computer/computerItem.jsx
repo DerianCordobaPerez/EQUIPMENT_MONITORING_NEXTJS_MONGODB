@@ -1,8 +1,8 @@
-import Link from 'next/link'
+import Link from "next/link";
 
-export default function ComputerItem({ computer }) {
-  const { name, role, ip, connected } = computer
-
+export default function ComputerItem({
+  computer: { name, role, ip, connected },
+}) {
   return (
     <div key={role} className="col me-4">
       <div className="card__computers px-4 pt-2">
@@ -19,25 +19,25 @@ export default function ComputerItem({ computer }) {
         <div className={`separator__${connected}`}></div>
 
         <div className="card__footer">
-          <Link href={'computers/[id]/show'} as={`computers/${ip}/show`}>
+          <Link href={"computers/[id]/show"} as={`computers/${ip}/show`}>
             <a className="me-1">
               <i className={`bi bi-eye-fill icon color-${connected}`}></i>
             </a>
           </Link>
 
-          <Link href={'computers/[id]/edit'} as={`computers/${ip}/edit`}>
+          <Link href={"computers/[id]/edit"} as={`computers/${ip}/edit`}>
             <a className="mx-1">
               <i className={`bi bi-pencil-square icon color-${connected}`}></i>
             </a>
           </Link>
 
-          <Link href={'computers/[id]/backup'} as={`computers/${ip}/backup`}>
+          <Link href={"computers/[id]/backup"} as={`computers/${ip}/backup`}>
             <a className="ms-1">
               <i className={`bi bi-device-hdd icon color-${connected}`}></i>
             </a>
           </Link>
 
-          <Link href={'computers/[id]/restore'} as={`computers/${ip}/restore`}>
+          <Link href={"computers/[id]/restore"} as={`computers/${ip}/restore`}>
             <a className="ms-1">
               <i className={`bi bi-folder-symlink icon color-${connected}`}></i>
             </a>
@@ -45,5 +45,5 @@ export default function ComputerItem({ computer }) {
         </div>
       </div>
     </div>
-  )
+  );
 }
