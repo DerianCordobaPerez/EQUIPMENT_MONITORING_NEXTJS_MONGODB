@@ -1,6 +1,8 @@
-export default function Option({ field, fieldChanged, value }) {
-  const { label, options, uid } = field
-
+export default function Option({
+  onChange,
+  value,
+  field: { label, options, uid },
+}) {
   return (
     <div className="form-check">
       <h4 className="text-muted">{label}</h4>
@@ -14,12 +16,12 @@ export default function Option({ field, fieldChanged, value }) {
               name={field.uid}
               value={option.value}
               checked={value === option.value}
-              onChange={({ target }) => fieldChanged(uid, target.value)}
+              onChange={({ target }) => onChange(uid, target.value)}
             />
             {option.label}
           </label>
-        )
+        );
       })}
     </div>
-  )
+  );
 }

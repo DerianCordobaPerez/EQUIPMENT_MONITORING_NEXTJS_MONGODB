@@ -1,91 +1,89 @@
-import { useState, useEffect } from 'react'
-import Field from './field'
-import FieldGroup from './fieldGroup'
-import Select from './select'
-import Link from 'next/link'
-import Option from './option'
+import { useState, useEffect } from "react";
+import Field from "./field";
+import FieldGroup from "./fieldGroup";
+import Select from "./select";
+import Link from "next/link";
+import Option from "./option";
 
 const fieldMeetsCondition = (values) => (field) => {
   if (field.conditional && field.conditional.field) {
-    const segments = field.conditional.field.split('_')
-    const fieldId = segments[segments.length - 1]
-    return values[fieldId] === field.conditional.value
+    const segments = field.conditional.field.split("_");
+    const fieldId = segments[segments.length - 1];
+    return values[fieldId] === field.conditional.value;
   }
-  return true
-}
+  return true;
+};
 
 export default function Form({ data, closeRoute, handleSubmit }) {
-  const [page, setPage] = useState(0)
-  const [currentPageData, setCurrentPageData] = useState(data[page])
+  const [page, setPage] = useState(0);
+  const [currentPageData, setCurrentPageData] = useState(data[page]);
   const [values, setValues] = useState({
     ...data.reduce((acc, page) => {
       page.fields.forEach((field) => {
-        acc[field.uid] = field.value || (field.options ? [] : '')
-      })
-      return acc
+        acc[field.uid] = field.value || (field.options ? [] : "");
+      });
+      return acc;
     }, {}),
-  })
+  });
 
-  closeRoute ??= '/'
+  closeRoute ??= "/";
 
   useEffect(() => {
-    const upcomingPageData = data[page]
-    setCurrentPageData(upcomingPageData)
+    const upcomingPageData = data[page];
+    setCurrentPageData(upcomingPageData);
     setValues((currentValues) => {
       const newValues = upcomingPageData.fields.reduce((obj, field) => {
-        if (field.component === 'field_group') {
+        if (field.component === "field_group") {
           for (const subField of field.fields) {
-            obj[subField.uid] = ''
+            obj[subField.uid] = "";
           }
         } else {
-          obj[field.uid] = ''
+          obj[field.uid] = "";
         }
 
-        return obj
-      }, {})
+        return obj;
+      }, {});
 
-      return Object.assign({}, newValues, currentValues)
-    })
-  }, [page, data])
+      return Object.assign({}, newValues, currentValues);
+    });
+  }, [page, data]);
 
   const fieldChange = (fieldId, value) => {
     setValues((currentValues) => {
-      currentValues[fieldId] = value
-      return currentValues
-    })
+      currentValues[fieldId] = value;
+      return currentValues;
+    });
 
-    setCurrentPageData((currentPageData) => {
-      return Object.assign({}, currentPageData)
-    })
-  }
+    setCurrentPageData((currentPageData) => Object.assign({}, currentPageData));
+  };
 
   const navigatePages = (direction) => () => {
     const findNextPage = (page) => {
-      const upcomingPageData = data[page]
+      const upcomingPageData = data[page];
       if (upcomingPageData.conditional && upcomingPageData.conditional.field) {
-        const segments = upcomingPageData.conditional.field.split('_')
-        const fieldId = segments[segments.length - 1]
+        const segments = upcomingPageData.conditional.field.split("_");
+        const fieldId = segments[segments.length - 1];
 
-        const fieldToMatchValue = values[fieldId]
+        const fieldToMatchValue = values[fieldId];
 
         if (fieldToMatchValue !== upcomingPageData.conditional.value) {
-          return findNextPage(direction === 'next' ? page + 1 : page - 1)
+          return findNextPage(direction === "next" ? page + 1 : page - 1);
         }
       }
-      return page
-    }
+      return page;
+    };
 
-    setPage(findNextPage(direction === 'next' ? page + 1 : page - 1))
-  }
+    setPage(findNextPage(direction === "next" ? page + 1 : page - 1));
+  };
 
-  const nextPage = navigatePages('next')
-  const prevPage = navigatePages('prev')
+  const nextPage = navigatePages("next");
+  const prevPage = navigatePages("prev");
 
   const onSubmit = (e) => {
-    e.preventDefault()
-    console.log(values)
-    handleSubmit(values)
-  }
+    e.preventDefault();
+    console.log(values);
+    handleSubmit(values);
+  };
 
   return (
     <form
@@ -102,42 +100,42 @@ export default function Form({ data, closeRoute, handleSubmit }) {
         .filter(fieldMeetsCondition(values))
         .map((field) => {
           switch (field.component) {
-            case 'field_group':
+            case "field_group":
               return (
                 <FieldGroup
                   key={field.uid}
                   field={field}
-                  change={fieldChange}
+                  onChange={fieldChange}
                   values={values}
                 />
-              )
-            case 'select':
+              );
+            case "select":
               return (
                 <Select
                   key={field.uid}
                   field={field}
-                  change={fieldChange}
+                  onChange={fieldChange}
                   value={values[field.uid]}
                 />
-              )
-            case 'options':
+              );
+            case "options":
               return (
                 <Option
                   key={field.uid}
                   field={field}
-                  fieldChanged={fieldChange}
+                  onChange={fieldChange}
                   value={values[field.uid]}
                 />
-              )
+              );
             default:
               return (
                 <Field
                   key={field.uid}
                   field={field}
-                  change={fieldChange}
+                  onChange={fieldChange}
                   value={values[field.uid]}
                 />
-              )
+              );
           }
         })}
 
@@ -164,5 +162,5 @@ export default function Form({ data, closeRoute, handleSubmit }) {
         </div>
       )}
     </form>
-  )
+  );
 }

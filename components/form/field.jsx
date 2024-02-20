@@ -1,8 +1,9 @@
-export default function Field({ field, change, type, value }) {
-  const { uid, label, component } = field
-
-  const onChange = ({ target }) => change(uid, target.value)
-
+export default function Field({
+  onChange,
+  type,
+  value,
+  field: { uid, label, component },
+}) {
   return (
     <div key={uid}>
       <label htmlFor={uid}>{label}</label>
@@ -12,8 +13,8 @@ export default function Field({ field, change, type, value }) {
         id={uid}
         name={uid}
         value={value}
-        onChange={onChange}
+        onChange={({ target }) => change(uid, target.value)}
       />
     </div>
-  )
+  );
 }
